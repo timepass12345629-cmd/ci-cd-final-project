@@ -1,6 +1,6 @@
 # CI/CD Final Project: Automated Pipeline with GitHub Actions and Tekton on OpenShift
 
-[![CI Workflow](https://github.com/timepass12345629-cmd/ci-cd-final-project/actions/workflows/workflow.yml/badge.svg)](https://github.com/timepass12345629-cmd/ci-cd-final-project/actions)
+[![CI Workflow](https://github.com/timepass12345629-cmd/ci-cd-final-project-/actions/workflows/workflow.yml/badge.svg)](https://github.com/timepass12345629-cmd/ci-cd-final-project-/actions)
 
 ## Project Overview
 
@@ -111,8 +111,8 @@ The project demonstrates an enterprise-grade Continuous Integration and Continuo
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone git@github-college:timepass12345629-cmd/ci-cd-final-project.git
-cd ci-cd-final-project
+git clone git@github-college:timepass12345629-cmd/ci-cd-final-project-.git
+cd ci-cd-final-project-
 
 # Create and activate virtual environment
 python -m venv venv
@@ -164,7 +164,7 @@ oc apply -f .tekton/pipeline.yml
 # Start pipeline execution
 tkn pipeline start cd-pipeline \
     -w name=pipeline-workspace,claimName=pipelinerun-pvc \
-    -p git-url="https://github.com/timepass12345629-cmd/ci-cd-final-project.git" \
+    -p git-url="https://github.com/timepass12345629-cmd/ci-cd-final-project-.git" \
     -p git-revision="master" \
     -p image-name="image-registry.openshift-image-registry.svc:5000/$(oc project -q)/cd-app:latest" \
     --showlog

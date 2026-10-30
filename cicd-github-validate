@@ -1,5 +1,5 @@
 [INFO] Validating GitHub Actions CI workflow execution...
-[INFO] Repository: timepass12345629-cmd/ci-cd-final-project
+[INFO] Repository: timepass12345629-cmd/ci-cd-final-project-
 [INFO] Workflow: CI Workflow (.github/workflows/workflow.yml)
 [INFO] Trigger: push on refs/heads/master
 
