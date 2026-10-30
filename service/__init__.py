@@ -26,3 +26,4 @@ logger.info("**************************************************")
 
 # Import routes after app is defined
 from service import routes  # noqa: F401, E402
+

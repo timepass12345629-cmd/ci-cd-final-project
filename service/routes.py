@@ -115,3 +115,4 @@ def not_found(error):
 def mediatype_not_supported(error):
     """Handles unsupported media type with 415_UNSUPPORTED_MEDIA_TYPE"""
     return jsonify({"error": "Unsupported Media Type", "message": str(error)}), status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+

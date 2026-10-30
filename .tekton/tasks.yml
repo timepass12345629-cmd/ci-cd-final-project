@@ -82,3 +82,4 @@ spec:
           oc create deployment $(params.app-name) --image=$(params.image-name) --dry-run=client -o yaml | oc apply -f -
           oc expose deployment $(params.app-name) --port=8000 --dry-run=client -o yaml | oc apply -f -
           oc rollout status deployment/$(params.app-name)
+

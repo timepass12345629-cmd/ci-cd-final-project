@@ -86,3 +86,4 @@ class Product:
         """Removes all Products from the collection"""
         cls.data.clear()
         cls.id_counter = 0
+
