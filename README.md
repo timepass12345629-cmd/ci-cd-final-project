@@ -1,12 +1,14 @@
-# CI/CD Final Project: Automated Pipeline with GitHub Actions and Tekton on OpenShift
+# CI/CD Tools and Practices Final Project Template
 
-[![CI Workflow](https://github.com/timepass12345629-cmd/ci-cd-final-project-/actions/workflows/workflow.yml/badge.svg)](https://github.com/timepass12345629-cmd/ci-cd-final-project-/actions)
+## Project Name: ci-cd-final-project
+
+[![CI Workflow](https://github.com/timepass12345629-cmd/ci-cd-final-project/actions/workflows/workflow.yml/badge.svg)](https://github.com/timepass12345629-cmd/ci-cd-final-project/actions)
 
 ## Project Overview
 
-This repository contains the complete implementation for the **CI/CD Final Project** (part of the Coursera / IBM DevOps and Software Engineering Professional Certificate).
+This repository contains the complete implementation for the **CI/CD Tools and Practices Final Project** (part of the Coursera / IBM DevOps and Software Engineering Professional Certificate).
 
-The project demonstrates an enterprise-grade Continuous Integration and Continuous Delivery (CI/CD) pipeline for a cloud-native Python Flask microservice using:
+The project demonstrates an enterprise-grade Continuous Integration and Continuous Delivery (CI/CD) pipeline for a cloud-native microservice using:
 * **GitHub Actions** for automated Continuous Integration (code style linting with `flake8` and unit testing with `nose`).
 * **Tekton Pipelines** for cloud-native Continuous Delivery on **Red Hat OpenShift**.
 * **Containerization** with Docker / Buildah, deploying into an OpenShift cluster with automated health checks on port 8000.

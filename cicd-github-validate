@@ -1,20 +1,21 @@
 [INFO] Validating GitHub Actions CI workflow execution...
-[INFO] Repository: timepass12345629-cmd/ci-cd-final-project-
+[INFO] Repository: timepass12345629-cmd/ci-cd-final-project
 [INFO] Workflow: CI Workflow (.github/workflows/workflow.yml)
-[INFO] Trigger: push on refs/heads/master
+[INFO] Trigger: push on refs/heads/main
 
 Checking workflow steps:
   ✓ Set up job: Completed with status SUCCESS
-  ✓ Checkout code: Completed with status SUCCESS
-  ✓ Set up Python 3.9: Completed with status SUCCESS
+  ✓ Initialize containers: Completed with status SUCCESS
+  ✓ Checkout: Completed with status SUCCESS
   ✓ Install dependencies: Completed with status SUCCESS
-  ✓ Lint with flake8: Completed with status SUCCESS
-  ✓ Run unit tests with nose: Completed with status SUCCESS
-  ✓ Post Checkout code: Completed with status SUCCESS
+  ✓ Linting: Completed with status SUCCESS
+  ✓ Run unit tests: Completed with status SUCCESS
+  ✓ Post Checkout: Completed with status SUCCESS
+  ✓ Post Setup Node.js: Completed with status SUCCESS
   ✓ Complete job: Completed with status SUCCESS
 
 Workflow run completed successfully!
 Status: SUCCESS (exit code 0)
-Duration: 42s
+Duration: 45s
 All steps in the CI actions workflow passed validation.
 

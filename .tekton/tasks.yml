@@ -3,35 +3,35 @@ kind: Task
 metadata:
   name: cleanup
 spec:
-  description: Cleans up the workspace to ensure a fresh start for pipeline runs.
+  description: This task will clean up a workspace by deleting all the files
   workspaces:
     - name: source
   steps:
-    - name: remove-files
-      image: alpine:latest
+    - name: remove
+      image: alpine:3
       workingDir: $(workspaces.source.path)
       command: ["/bin/sh"]
       args:
         - "-c"
-        - "rm -rf *"
+        - "rm -rf $(workspaces.source.path)/*"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: flake8
 spec:
-  description: Lints the source code using flake8.
+  description: This task runs flake8 to lint Python code
   workspaces:
     - name: source
   steps:
-    - name: run-flake8
+    - name: flake8
       image: python:3.9-slim
       workingDir: $(workspaces.source.path)
       command: ["/bin/bash"]
       args:
         - "-c"
         - |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install flake8
           flake8 service --count --max-complexity=10 --max-line-length=127 --statistics
 ---
@@ -40,27 +40,32 @@ kind: Task
 metadata:
   name: nose
 spec:
-  description: Runs unit tests using nose.
+  description: This task runs unit tests using the nose testing framework
   workspaces:
     - name: source
+  params:
+    - name: args
+      description: Arguments to pass to nose
+      type: string
+      default: "-v"
   steps:
-    - name: run-nose
+    - name: nosetests
       image: python:3.9-slim
       workingDir: $(workspaces.source.path)
       command: ["/bin/bash"]
       args:
         - "-c"
         - |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip wheel
           pip install -r requirements.txt
-          nosetests -v --with-spec --spec-color
+          nosetests $(params.args)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy
 spec:
-  description: Deploys the service to OpenShift cluster.
+  description: This task deploys the application to OpenShift
   workspaces:
     - name: source
   params:
@@ -82,4 +87,3 @@ spec:
           oc create deployment $(params.app-name) --image=$(params.image-name) --dry-run=client -o yaml | oc apply -f -
           oc expose deployment $(params.app-name) --port=8000 --dry-run=client -o yaml | oc apply -f -
           oc rollout status deployment/$(params.app-name)
-
