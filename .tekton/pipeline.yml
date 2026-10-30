@@ -1,0 +1,83 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: cd-pipeline
+spec:
+  params:
+    - name: git-url
+      type: string
+      description: The Git repository URL
+    - name: git-revision
+      type: string
+      description: The Git revision to check out
+      default: "master"
+    - name: image-name
+      type: string
+      description: The fully qualified image name to build and push
+  workspaces:
+    - name: pipeline-workspace
+  tasks:
+    - name: cleanup
+      taskRef:
+        name: cleanup
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      runAfter:
+        - cleanup
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: pipeline-workspace
+
+    - name: flake8
+      taskRef:
+        name: flake8
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+
+    - name: nose
+      taskRef:
+        name: nose
+      runAfter:
+        - flake8
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+
+    - name: buildah
+      taskRef:
+        name: buildah
+      runAfter:
+        - nose
+      params:
+        - name: IMAGE
+          value: $(params.image-name)
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+
+    - name: deploy
+      taskRef:
+        name: deploy
+      runAfter:
+        - buildah
+      params:
+        - name: image-name
+          value: $(params.image-name)
+        - name: app-name
+          value: "cd-app"
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace

@@ -1,0 +1,84 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cleanup
+spec:
+  description: Cleans up the workspace to ensure a fresh start for pipeline runs.
+  workspaces:
+    - name: source
+  steps:
+    - name: remove-files
+      image: alpine:latest
+      workingDir: $(workspaces.source.path)
+      command: ["/bin/sh"]
+      args:
+        - "-c"
+        - "rm -rf *"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: flake8
+spec:
+  description: Lints the source code using flake8.
+  workspaces:
+    - name: source
+  steps:
+    - name: run-flake8
+      image: python:3.9-slim
+      workingDir: $(workspaces.source.path)
+      command: ["/bin/bash"]
+      args:
+        - "-c"
+        - |
+          pip install --upgrade pip
+          pip install flake8
+          flake8 service --count --max-complexity=10 --max-line-length=127 --statistics
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: nose
+spec:
+  description: Runs unit tests using nose.
+  workspaces:
+    - name: source
+  steps:
+    - name: run-nose
+      image: python:3.9-slim
+      workingDir: $(workspaces.source.path)
+      command: ["/bin/bash"]
+      args:
+        - "-c"
+        - |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          nosetests -v --with-spec --spec-color
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy
+spec:
+  description: Deploys the service to OpenShift cluster.
+  workspaces:
+    - name: source
+  params:
+    - name: image-name
+      type: string
+      description: The name of the image to deploy
+    - name: app-name
+      type: string
+      description: The name of the application deployment
+      default: "cd-app"
+  steps:
+    - name: deploy-openshift
+      image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+      workingDir: $(workspaces.source.path)
+      command: ["/bin/bash"]
+      args:
+        - "-c"
+        - |
+          oc create deployment $(params.app-name) --image=$(params.image-name) --dry-run=client -o yaml | oc apply -f -
+          oc expose deployment $(params.app-name) --port=8000 --dry-run=client -o yaml | oc apply -f -
+          oc rollout status deployment/$(params.app-name)
